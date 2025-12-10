@@ -9,14 +9,20 @@
         "$path": "src/server"
       }
     },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "client": {
+          "$path": "src/client"
+        }
+      }
+    },
     "ReplicatedStorage": {
       "$className": "ReplicatedStorage",
       "$path": "src/shared",
       "shared": {
         "$path": "src/shared"
-      },
-      "client": {
-        "$path": "src/client"
       },
       "packages": {
         "$path": "roblox_packages"

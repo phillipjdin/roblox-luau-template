@@ -1,1 +1,3 @@
-print("Hello world, from server!")
+local PetShopService = require(script.Parent:WaitForChild("PetShopService"))
+
+PetShopService.start()
