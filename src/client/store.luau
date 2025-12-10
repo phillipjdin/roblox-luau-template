@@ -2,9 +2,11 @@ local Reflex = require(game.ReplicatedStorage.packages.reflex)
 local types = require(game.ReplicatedStorage.shared.types)
 
 type PlayerData = types.PlayerData
+type LeaderboardEntry = types.LeaderboardEntry
 
 export type ShopState = {
 	playerData: PlayerData?,
+	leaderboard: { LeaderboardEntry },
 	isShopOpen: boolean,
 	isPurchasing: boolean,
 	lastMessage: string?,
@@ -12,6 +14,7 @@ export type ShopState = {
 
 local initialState: ShopState = {
 	playerData = nil,
+	leaderboard = {},
 	isShopOpen = false,
 	isPurchasing = false,
 	lastMessage = nil,
@@ -70,6 +73,12 @@ local shopSlice = Reflex.createProducer(initialState, {
 	setMessage = function(state, message: string?)
 		return {
 			lastMessage = message,
+		}
+	end,
+	
+	setLeaderboard = function(state, leaderboard: { LeaderboardEntry })
+		return {
+			leaderboard = leaderboard,
 		}
 	end,
 })

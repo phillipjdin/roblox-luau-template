@@ -14,4 +14,11 @@ export type PlayerData = {
 	ownedPets: { string },
 }
 
+export type LeaderboardEntry = {
+	userId: number,
+	name: string,
+	coins: number,
+	rank: number,
+}
+
 return {}

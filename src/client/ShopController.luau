@@ -1,6 +1,5 @@
 local Remo = require(game.ReplicatedStorage.packages.remo)
 local store = require(script.Parent.store)
-local PetData = require(game.ReplicatedStorage.shared.PetData)
 
 local ShopRemotes = Remo.namespace("Shop")
 
@@ -15,6 +14,18 @@ function ShopController.FetchPlayerData()
 			store.setPlayerData(playerData)
 		else
 			warn("Failed to fetch player data")
+		end
+	end)
+end
+
+function ShopController.FetchLeaderboard()
+	task.spawn(function()
+		local success, leaderboard = ShopRemotes.Client:call("GetLeaderboard"):await()
+		
+		if success and leaderboard then
+			store.setLeaderboard(leaderboard)
+		else
+			warn("Failed to fetch leaderboard")
 		end
 	end)
 end
@@ -38,6 +49,7 @@ function ShopController.PurchasePet(petId: string)
 					store.updateCoins(result.newBalance)
 				end
 				store.addOwnedPet(petId)
+				ShopController.FetchLeaderboard()
 			end
 		else
 			store.setMessage("Failed to purchase pet!")

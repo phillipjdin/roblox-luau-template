@@ -6,6 +6,7 @@ local ShopRemotes = Remo.createNamespace("Shop", function()
 	return {
 		PurchasePet = Remo.createRemote("PurchasePet"),
 		GetPlayerData = Remo.createRemote("GetPlayerData"),
+		GetLeaderboard = Remo.createRemote("GetLeaderboard"),
 	}
 end)
 
@@ -17,6 +18,10 @@ end)
 -- Handle player data requests
 ShopRemotes.Server:on("GetPlayerData", function(player)
 	return ShopService.GetPlayerData(player)
+end)
+
+ShopRemotes.Server:on("GetLeaderboard", function(player)
+	return ShopService.GetLeaderboard()
 end)
 
 return ShopRemotes

@@ -76,4 +76,8 @@ function ShopService.GetPlayerData(player: Player)
 	return PlayerDataManager.GetData(player)
 end
 
+function ShopService.GetLeaderboard()
+	return PlayerDataManager.GetTopPlayers(50)
+end
+
 return ShopService
