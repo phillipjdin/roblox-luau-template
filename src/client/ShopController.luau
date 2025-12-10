@@ -12,7 +12,7 @@ function ShopController.FetchPlayerData()
 		local success, playerData = ShopRemotes.Client:call("GetPlayerData"):await()
 		
 		if success and playerData then
-			store.setPlayerData(playerData)
+			store.shop.setPlayerData(playerData)
 		else
 			warn("Failed to fetch player data")
 		end
@@ -21,47 +21,47 @@ end
 
 -- Purchase a pet
 function ShopController.PurchasePet(petId: string)
-	store.setPurchasing(true)
-	store.setMessage(nil)
+	store.shop.setPurchasing(true)
+	store.shop.setMessage(nil)
 	
 	task.spawn(function()
 		local success, result = ShopRemotes.Client:call("PurchasePet", petId):await()
 		
-		store.setPurchasing(false)
+		store.shop.setPurchasing(false)
 		
 		if success and result then
-			store.setMessage(result.message)
+			store.shop.setMessage(result.message)
 			
 			if result.success then
 				-- Update local state
 				if result.newBalance then
-					store.updateCoins(result.newBalance)
+					store.shop.updateCoins(result.newBalance)
 				end
-				store.addOwnedPet(petId)
+				store.shop.addOwnedPet(petId)
 			end
 		else
-			store.setMessage("Failed to purchase pet!")
+			store.shop.setMessage("Failed to purchase pet!")
 			warn("Purchase failed:", result)
 		end
 		
 		-- Clear message after 3 seconds
 		task.delay(3, function()
-			store.setMessage(nil)
+			store.shop.setMessage(nil)
 		end)
 	end)
 end
 
 -- Toggle shop UI
 function ShopController.ToggleShop()
-	store.toggleShop()
+	store.shop.toggleShop()
 end
 
 function ShopController.OpenShop()
-	store.toggleShop(true)
+	store.shop.toggleShop(true)
 end
 
 function ShopController.CloseShop()
-	store.toggleShop(false)
+	store.shop.toggleShop(false)
 end
 
 return ShopController

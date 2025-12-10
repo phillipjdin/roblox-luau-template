@@ -72,6 +72,10 @@ function PlayerDataManager.Cleanup(player: Player)
 	print(`Cleaned up data for {player.Name}`)
 end
 
+function PlayerDataManager.GetAllPlayers(): { [Player]: PlayerData }
+	return playerData
+end
+
 -- Connect to player events
 Players.PlayerAdded:Connect(function(player)
 	PlayerDataManager.Initialize(player)

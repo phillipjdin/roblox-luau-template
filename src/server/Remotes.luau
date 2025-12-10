@@ -1,11 +1,19 @@
 local Remo = require(game.ReplicatedStorage.packages.remo)
 local ShopService = require(script.Parent.ShopService)
+local LeaderboardService = require(script.Parent.LeaderboardService)
 
 -- Create namespace for shop remotes
 local ShopRemotes = Remo.createNamespace("Shop", function()
 	return {
 		PurchasePet = Remo.createRemote("PurchasePet"),
 		GetPlayerData = Remo.createRemote("GetPlayerData"),
+	}
+end)
+
+-- Create namespace for leaderboard remotes
+local LeaderboardRemotes = Remo.createNamespace("Leaderboard", function()
+	return {
+		GetTopPlayers = Remo.createRemote("GetTopPlayers"),
 	}
 end)
 
@@ -19,4 +27,12 @@ ShopRemotes.Server:on("GetPlayerData", function(player)
 	return ShopService.GetPlayerData(player)
 end)
 
-return ShopRemotes
+-- Handle leaderboard requests
+LeaderboardRemotes.Server:on("GetTopPlayers", function(player, limit: number?)
+	return LeaderboardService.GetTopPlayers(limit)
+end)
+
+return {
+	Shop = ShopRemotes,
+	Leaderboard = LeaderboardRemotes,
+}

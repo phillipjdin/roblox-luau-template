@@ -9,9 +9,10 @@ local source = vide.source
 
 return function()
 	local state = store()
+	local shopState = state.shop
 	
 	-- Only render if shop is open
-	if not state.isShopOpen then
+	if not shopState.isShopOpen then
 		return nil
 	end
 	
@@ -90,7 +91,7 @@ return function()
 						Position = UDim2.new(0, 10, 0, 0),
 						BackgroundTransparency = 1,
 						Text = function()
-							return `🪙 {state.playerData and state.playerData.coins or 0}`
+							return `🪙 {shopState.playerData and shopState.playerData.coins or 0}`
 						end,
 						TextColor3 = Color3.new(1, 1, 1),
 						TextSize = 20,
@@ -122,7 +123,7 @@ return function()
 			
 			-- Message display
 			function()
-				if not state.lastMessage then
+				if not shopState.lastMessage then
 					return nil
 				end
 				
@@ -140,7 +141,7 @@ return function()
 						Size = UDim2.new(1, -20, 1, 0),
 						Position = UDim2.new(0, 10, 0, 0),
 						BackgroundTransparency = 1,
-						Text = state.lastMessage,
+						Text = shopState.lastMessage,
 						TextColor3 = Color3.new(1, 1, 1),
 						TextSize = 16,
 						Font = Enum.Font.Gotham,
@@ -152,14 +153,14 @@ return function()
 			-- Pets grid
 			create "ScrollingFrame" {
 				Size = function()
-					if state.lastMessage then
+					if shopState.lastMessage then
 						return UDim2.new(1, -40, 1, -160)
 					else
 						return UDim2.new(1, -40, 1, -100)
 					end
 				end,
 				Position = function()
-					if state.lastMessage then
+					if shopState.lastMessage then
 						return UDim2.new(0, 20, 0, 140)
 					else
 						return UDim2.new(0, 20, 0, 90)
@@ -187,10 +188,10 @@ return function()
 					local cards = {}
 					
 					for i, pet in PetData.Pets do
-						local isOwned = state.playerData 
-							and table.find(state.playerData.ownedPets, pet.id) ~= nil
-						local canAfford = state.playerData 
-							and state.playerData.coins >= pet.price
+						local isOwned = shopState.playerData 
+							and table.find(shopState.playerData.ownedPets, pet.id) ~= nil
+						local canAfford = shopState.playerData 
+							and shopState.playerData.coins >= pet.price
 						
 						cards[i] = PetCard({
 							pet = pet,
@@ -199,7 +200,7 @@ return function()
 							onPurchase = function()
 								ShopController.PurchasePet(pet.id)
 							end,
-							isPurchasing = state.isPurchasing,
+							isPurchasing = shopState.isPurchasing,
 						})
 					end
 					

@@ -10,14 +10,33 @@ export type ShopState = {
 	lastMessage: string?,
 }
 
-local initialState: ShopState = {
+export type LeaderboardEntry = {
+	playerName: string,
+	userId: number,
+	coins: number,
+	rank: number,
+}
+
+export type LeaderboardState = {
+	entries: { LeaderboardEntry },
+	isLeaderboardOpen: boolean,
+	isLoading: boolean,
+}
+
+local shopInitialState: ShopState = {
 	playerData = nil,
 	isShopOpen = false,
 	isPurchasing = false,
 	lastMessage = nil,
 }
 
-local shopSlice = Reflex.createProducer(initialState, {
+local leaderboardInitialState: LeaderboardState = {
+	entries = {},
+	isLeaderboardOpen = false,
+	isLoading = false,
+}
+
+local shopSlice = Reflex.createProducer(shopInitialState, {
 	setPlayerData = function(state, playerData: PlayerData)
 		return {
 			playerData = playerData,
@@ -74,4 +93,30 @@ local shopSlice = Reflex.createProducer(initialState, {
 	end,
 })
 
-return shopSlice
+local leaderboardSlice = Reflex.createProducer(leaderboardInitialState, {
+	setEntries = function(state, entries: { LeaderboardEntry })
+		return {
+			entries = entries,
+		}
+	end,
+	
+	toggleLeaderboard = function(state, isOpen: boolean?)
+		return {
+			isLeaderboardOpen = if isOpen ~= nil then isOpen else not state.isLeaderboardOpen,
+		}
+	end,
+	
+	setLoading = function(state, isLoading: boolean)
+		return {
+			isLoading = isLoading,
+		}
+	end,
+})
+
+-- Combine both slices
+local combinedStore = Reflex.combineProducers({
+	shop = shopSlice,
+	leaderboard = leaderboardSlice,
+})
+
+return combinedStore
