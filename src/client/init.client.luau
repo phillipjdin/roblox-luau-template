@@ -7,6 +7,9 @@ print("Hello world, from client!")
 local ShopController = require(script.ShopController)
 local ShopUI = require(script.Components.ShopUI)
 local ShopButton = require(script.Components.ShopButton)
+local LeaderboardController = require(script.LeaderboardController)
+local LeaderboardUI = require(script.Components.LeaderboardUI)
+local LeaderboardButton = require(script.Components.LeaderboardButton)
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -19,6 +22,8 @@ local root = vide.root(function()
 	return {
 		ShopButton(),
 		ShopUI(),
+		LeaderboardButton(),
+		LeaderboardUI(),
 	}
 end)
 
