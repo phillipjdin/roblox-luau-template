@@ -2,11 +2,13 @@ local Players = game:GetService("Players")
 local types = require(game.ReplicatedStorage.shared.types)
 
 type PlayerData = types.PlayerData
+type LeaderboardEntry = types.LeaderboardEntry
 
 -- In-memory storage for player data (in production, use DataStoreService)
 local playerData: { [Player]: PlayerData } = {}
 
 local DEFAULT_COINS = 1000 -- Starting coins
+local DEFAULT_LEADERBOARD_LIMIT = 50
 
 local PlayerDataManager = {}
 
@@ -65,6 +67,35 @@ function PlayerDataManager.AddPet(player: Player, petId: string): boolean
 	
 	table.insert(data.ownedPets, petId)
 	return true
+end
+
+function PlayerDataManager.GetTopPlayers(limit: number?): { LeaderboardEntry }
+	local leaderboard: { LeaderboardEntry } = {}
+	
+	for player, data in playerData do
+		table.insert(leaderboard, {
+			userId = player.UserId,
+			playerName = player.Name,
+			coins = data.coins,
+		})
+	end
+	
+	table.sort(leaderboard, function(a, b)
+		if a.coins == b.coins then
+			return a.playerName < b.playerName
+		end
+		
+		return a.coins > b.coins
+	end)
+	
+	local resolvedLimit = math.max(0, limit or DEFAULT_LEADERBOARD_LIMIT)
+	local maxEntries = math.min(resolvedLimit, #leaderboard)
+	local trimmed = table.create(maxEntries)
+	for i = 1, maxEntries do
+		trimmed[i] = leaderboard[i]
+	end
+	
+	return trimmed
 end
 
 function PlayerDataManager.Cleanup(player: Player)
