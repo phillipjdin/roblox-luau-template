@@ -1,0 +1,17 @@
+{
+  "name": "Roblox Luau Template (Pet Shop)",
+  "install": "bash ./.cursor/install.sh",
+  "terminals": [
+    {
+      "name": "rojo-serve",
+      "command": "export PATH=\"$HOME/.rokit/bin:$HOME/.local/bin:$PATH\"; rojo serve build.project.json",
+      "description": "Rojo live-sync server on port 34872. Connect the Rojo plugin in Roblox Studio to sync src/ into a live session."
+    }
+  ],
+  "ports": [
+    {
+      "name": "rojo",
+      "port": 34872
+    }
+  ]
+}
